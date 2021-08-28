@@ -19,7 +19,6 @@
   - telnet
   notify: Start webserver
 
-
 - name: Download the required files
   when:
   - ansible_facts['os_family'] == 'RedHat'
@@ -41,7 +40,6 @@
     dest: /tmp/wordpress-{{ wordpress_version }}.tar.gz
     mode: '0440'
 
-
 - name: Unzip Wordpress file
   when: 
   - ansible_facts['os_family'] == "Debian" 
@@ -62,7 +60,6 @@
     dest: /etc/testfile.conf
     mode: '0644'
 
-
 - name: Create users and group
   when: 
   - ansible_facts['os_family'] == "Debian" 
@@ -80,12 +77,5 @@
     - ben
     - katy
     - anna
-     
 
-
-
-
-
-
-
-
+...
