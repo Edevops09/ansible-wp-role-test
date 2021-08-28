@@ -1,0 +1,22 @@
+# handlers file for wordpress
+- name: Start webserver
+  when: 
+  - ansible_facts['os_family'] == "Debian" 
+  systemd: 
+    name: "{{ item }}" 
+    state: restarted
+    enabled: true
+  with_items:
+  - apache2
+  - telnet 
+
+- name: Start httpd
+  when: 
+  - ansible_facts['os_family'] == "RedHat" 
+  systemd: 
+    name: "{{ item }}" 
+    state: restarted
+    enabled: true
+  with_items:
+  - httpd
+  - telnet 

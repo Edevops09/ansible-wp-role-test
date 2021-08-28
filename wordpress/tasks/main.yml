@@ -1,0 +1,91 @@
+---
+# tasks file for wordpress
+- name: Update the apt cache
+  when: 
+   - ansible_facts['os_family'] == 'Debian'
+  apt:
+    update_cache: yes
+
+- name: Download the required files
+  when:
+  - ansible_facts['os_family'] == 'Debian'
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - apache2
+  - php-{{ php_version }}
+  - php-mysql-{{ php_version }}
+  - telnet
+  notify: Start webserver
+
+
+- name: Download the required files
+  when:
+  - ansible_facts['os_family'] == 'RedHat'
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - httpd
+  - php-{{ php_version }}
+  - php-mysql-{{ php_version }}
+  - telnet
+  notify: Start httpd
+
+- name: Get wordpress url to download
+  when: 
+  - ansible_facts['os_family'] == "Debian" 
+  get_url:
+    url: https://wordpress.org/wordpress-{{ wordpress_version }}.tar.gz
+    dest: /tmp/wordpress-{{ wordpress_version }}.tar.gz
+    mode: '0440'
+
+
+- name: Unzip Wordpress file
+  when: 
+  - ansible_facts['os_family'] == "Debian" 
+  unarchive:
+    src: /tmp/wordpress-{{ wordpress_version }}.tar.gz
+    dest: /var/www/html/
+    remote_src: true
+
+- name: Move wordpress file
+  when: 
+  - ansible_facts['os_family'] == "Debian" 
+  shell: "cp -r  /var/www/html/wordpress/*   /var/www/html || exit 0"
+  ignore_errors: true
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: testfile
+    dest: /etc/testfile.conf
+    mode: '0644'
+
+
+- name: Create users and group
+  when: 
+  - ansible_facts['os_family'] == "Debian" 
+  ansible.builtin.user:
+    name: Create user accounts
+    ansible.builtin.user:
+      name: "{{ item }}"
+      groups: devops, admin
+      append: yes
+      state: present
+      generate_ssh_key: yes
+    with_items:
+    - bob
+    - lisa
+    - ben
+    - katy
+    - anna
+     
+
+
+
+
+
+
+
+
