@@ -15,17 +15,6 @@
   - telnet
   notify: Start webserver
 
-- name: Download the required files
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items:
-  - httpd
-  - php-{{ php_version }}
-  - php-mysql-{{ php_version }}
-  - telnet
-  notify: Start httpd
-
 - name: Get wordpress url to download
   get_url:
     url: https://wordpress.org/wordpress-{{ wordpress_version }}.tar.gz
@@ -49,15 +38,15 @@
     mode: '0644'
 
 - name: Create users and group
+  when:
+  - ansible_facts['os_family'] == Debian
   ansible.builtin.user:
-    name: Create user accounts
-    ansible.builtin.user:
-      name: "{{ item }}"
-      groups: devops, admin
-      append: yes
-      state: present
-      generate_ssh_key: yes
-    with_items:
+    name: "{{ item }}"
+    groups: devops, admin
+    append: yes
+    state: present
+    generate_ssh_key: yes
+  with_items:
     - bob
     - lisa
     - ben

@@ -5,5 +5,4 @@
   become_method: sudo
   roles: 
     - wordpress
-      when: 
-        - ansible_facts['os_family'] == 'Debian'
+      
