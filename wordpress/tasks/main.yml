@@ -4,7 +4,7 @@
   apt:
     update_cache: yes
   when:
-  - ansible_facts['os_family'] == "Debian"  
+  - ansible_facts['distribution'] == "Ubuntu"  
 
 - name: Download the required files
   package:
@@ -41,7 +41,7 @@
 
 - name: Create users and group
   when:
-  - ansible_facts['os_family'] == "Debian"
+  - ansible_facts['distribution'] == "Ubuntu"
   ansible.builtin.user:
     name: "{{ item }}"
     groups: devops, admin
