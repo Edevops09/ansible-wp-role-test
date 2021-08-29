@@ -1,0 +1,91 @@
+- name: Update apt cache
+  apt: 
+    update_cache: yes
+
+- name: Install apache2 
+  package: 
+    name:
+      - apache2
+      - telnet
+    state: present
+  
+- name: Enable ufw to allow Apache
+  ufw:
+    rule: allow
+    name: Apache Full
+    
+- name: Start apache
+  systemd:
+    name: apache2
+    state: started
+
+- name: Install php files
+  package: 
+    name: "{{ item }}" 
+    state: present
+  with_items:
+    - php
+    - libapache2-mod-php
+    - php-mysql
+    - php-curl
+    - php-gd 
+    - php-json
+    - php-zip
+    - php-mbstring
+
+- name: Replace dir.conf file
+  copy:
+    src: ./test-file
+    dest: /etc/apache2/mods-enabled/dir.conf
+    
+- name: Restart apache
+  systemd:
+    name: apache2
+    state: restarted
+    enabled: yes
+    
+- name: Download Wordpress file
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp
+
+- name: Unzip wordpress file
+  unarchive:
+    src: /tmp/wordpress-5.8.tar.gz
+    dest: /var/www/html
+    remote_src: true   
+
+- name: Move wordpress file
+  shell: "mv -f /var/www/html/wordpress/*   /var/www/html || exit 0"
+  ignore_errors: true    
+
+- name: Fix html file ownership
+  file:
+    path: /var/www/html
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: yes
+    
+- name: Create devops group
+  group:
+    name: devops
+    state: present
+
+- name: Create users and add them to groups    
+  user:
+    name: "{{ item }}"
+    groups: 
+      - devops
+      - admin
+    append: yes
+    state: present
+    generate_ssh_key: true
+  with_items:
+    - bob
+    - ben
+    - anna
+    - katy
+    - jane  
+
+      
