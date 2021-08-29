@@ -1,7 +1,7 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Installs Wordpress on Ubuntu and creates 5 users with admin privilege.
 
 Requirements
 ------------
@@ -23,13 +23,16 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+  - name: Install Wordpress
+    hosts: all
+    become: true
+    become_method: sudo
+    roles: 
+      - wordpress 
+   
 
 License
 -------
-
 BSD
 
 Author Information

@@ -1,6 +1,7 @@
 - name: Update apt cache
   apt: 
     update_cache: yes
+    cache_valid_time: 3600
 
 - name: Install apache2 
   package: 
@@ -23,16 +24,8 @@
   package: 
     name: "{{ item }}" 
     state: present
-  with_items:
-    - php
-    - libapache2-mod-php
-    - php-mysql
-    - php-curl
-    - php-gd 
-    - php-json
-    - php-zip
-    - php-mbstring
-
+  with_items: "{{ php_modules }}"
+   
 - name: Replace dir.conf file
   copy:
     src: ./test-file
