@@ -1,7 +1,7 @@
 galaxy_info:
-  author: your name
-  description: your role description
-  company: your company (optional)
+  author: Elyas 
+  description: Installs wordpress on Ubuntu and adds 5 users with admin privileges
+  company: Evolve Cyber
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
