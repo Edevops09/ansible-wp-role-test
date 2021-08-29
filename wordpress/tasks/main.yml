@@ -40,7 +40,7 @@
     src: testfile
     dest: /etc/testfile.conf
     mode: '0644'
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Ensure group "devops" exists
   ansible.builtin.group:
