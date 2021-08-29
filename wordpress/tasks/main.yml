@@ -7,6 +7,8 @@
   - ansible_facts['distribution'] == "Ubuntu"  
 
 - name: Download the required files
+  when:
+  - ansible_facts["distribution"] == "Ubuntu"
   package:
     name: "{{ item }}"
     state: present
@@ -38,13 +40,21 @@
     src: testfile
     dest: /etc/testfile.conf
     mode: '0644'
+  ignore_errors: yes
+
+- name: Ensure group "devops" exists
+  ansible.builtin.group:
+    name: devops
+    state: present
 
 - name: Create users and group
   when:
   - ansible_facts['distribution'] == "Ubuntu"
   ansible.builtin.user:
     name: "{{ item }}"
-    groups: devops, admin
+    groups: 
+      - devops
+      - admin
     append: yes
     state: present
     generate_ssh_key: yes
