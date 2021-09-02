@@ -20,11 +20,8 @@ Role Variables
 --------------
 
 `mysql_root_password:` Set your custom root password
-
 `mysql_db:` Set your database nameordpress
-
 `mysql_user:` Set your mysql user name
-
 `mysql_password:` Set the password for mysql user
 
 
