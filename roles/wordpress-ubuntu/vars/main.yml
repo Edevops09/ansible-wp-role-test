@@ -1,0 +1,31 @@
+---
+# vars file for wordpress-ubuntu
+install_core_files:
+  - apache2
+  - mysql-server 
+  - python3-pymysql
+  - php
+  - php-mysql
+  - libapache2-mod-php 
+
+php_modules: 
+  - php
+  - libapache2-mod-php
+  - php-mysql
+  - php-curl
+  - php-gd 
+  - php-json
+  - php-zip
+  - php-mbstring  
+
+mysql_modules:
+  - mysql-server
+  - mysql-client
+  - python-mysqldb  
+
+mysql_root_password: "mysql_root_password"
+mysql_db: "wordpress"
+mysql_user: "guest"
+mysql_password: "password"
+
+    

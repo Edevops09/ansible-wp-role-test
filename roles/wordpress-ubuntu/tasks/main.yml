@@ -1,0 +1,115 @@
+---
+# Installing Prerequisites packages
+- name: Update apt cache
+  apt: 
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install Prerequisites  
+  package: 
+    name: "{{ install_core_files }}"
+    state: present    
+
+- name: Install php files
+  package: 
+    name: "{{ item }}" 
+    state: present
+  with_items: "{{ php_modules }}"
+
+- name: Install MySQL
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ mysql_modules }}"
+
+
+# MySQL Configuration
+- name: Start the mysql database
+  service:
+    name: mysql
+    state: started
+
+- name: Set the root password
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
+  ignore_errors: yes
+  
+- name: Remove all anonymous user accounts
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  
+- name: Remove the MySQL test database
+  mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+ 
+- name: Creates database for WordPress
+  mysql_db:
+    name: "{{ mysql_db }}"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  
+- name: Create MySQL user for WordPress
+  mysql_user:
+    name: "{{ mysql_user }}"
+    password: "{{ mysql_password }}"
+    priv: "{{ mysql_db }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  
+
+# Wordpress Installation
+- name: Enable ufw to allow Apache
+  ufw:
+    rule: allow
+    name: Apache Full
+    
+- name: Start and enable apache
+  systemd:
+    name: apache2
+    state: started
+    
+- name: Replace dir.conf file
+  copy:
+    src: ./test-file
+    dest: /etc/apache2/mods-enabled/dir.conf
+    
+- name: Restart apache
+  systemd:
+    name: apache2
+    state: restarted
+    enabled: yes    
+
+- name: Download Wordpress file
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp
+
+- name: Unzip wordpress file
+  unarchive:
+    src: /tmp/wordpress-5.8.tar.gz
+    dest: /var/www/html
+    remote_src: true   
+
+- name: Move wordpress file
+  shell: "cp -r /var/www/html/wordpress/*   /var/www/html || exit 0"
+  ignore_errors: true    
+
+- name: Fix html file ownership
+  file:
+    path: /var/www/html
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: yes    

@@ -1,0 +1,9 @@
+---
+# vars file for create-user-groups
+users_list:
+  - bob
+  - ben
+  - anna
+  - katy
+  - jane  
+  

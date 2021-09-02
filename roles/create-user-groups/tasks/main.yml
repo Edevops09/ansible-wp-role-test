@@ -1,0 +1,38 @@
+---
+# tasks file to create-user-groups
+- name: Ensure "devops" group exists
+  when: 
+    - ansible_facts['distribution'] == "Ubuntu"
+  ansible.builtin.group:
+    name: devops
+    state: present
+
+- name: Create password less sudo for devops group
+  when: 
+    - ansible_facts['distribution'] == "Ubuntu"
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%devops'
+    line: '%devops ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Create users and add them to devops group
+  when: 
+    - ansible_facts['distribution'] == "Ubuntu"  
+  user:
+    name: "{{ item }}"
+    groups: 
+      - devops
+    append: yes
+    state: present
+    generate_ssh_key: true
+  with_items: "{{ users_list }}"
+
+- name: Install telnet for future use
+  package:
+    name: telnet
+    state: present  
+
+
+  

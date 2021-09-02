@@ -1,0 +1,9 @@
+---
+# handlers file for wordpress-redhat
+- name: Start webserver
+  systemd: 
+    name: "{{ item }}" 
+    state: restarted
+    enabled: true
+  with_items:
+  - httpd
