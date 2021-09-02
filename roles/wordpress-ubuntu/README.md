@@ -19,11 +19,13 @@ Required Core Files:
 Role Variables
 --------------
 
-`mysql_root_password:` Set your custom root password"
-`mysql_db:` "Set your database nameordpress"
-`mysql_user:` "Set your mysql user name"
-`mysql_password:` "Set the password for mysql user"
+`mysql_root_password:` Set your custom root password
 
+`mysql_db:` Set your database nameordpress
+
+`mysql_user:` Set your mysql user name
+
+`mysql_password:` Set the password for mysql user
 
 
 Example Playbook
@@ -31,7 +33,7 @@ Example Playbook
 
 This is an example on how to run all three roles with the playbook:
 
-    ```yaml
+    
     - name: Run roles playbook
       hosts: all
       become: true
@@ -40,7 +42,7 @@ This is an example on how to run all three roles with the playbook:
         - { role: wordpress-ubuntu, when: ansible_os_family == 'Debian' }
         - { role: create-user-groups, when: ansible_os_family == 'Debian' }
         - { role: wordpress-redhat, when: ansible_os_family == 'RedHat' }
-        ```
+        
 
 License
 -------
