@@ -1,29 +1,37 @@
-Role Name
+Install Wordpress on Ubuntu and RedHat
 =========
 
-Installs Wordpress on Ubuntu and creates 5 users with admin privilege.
+This playbook installs Wordpress on Ubuntu and RedHat and creates users, and groups with admin privilege.
+
+This is a test playbook for practice.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Required Core Files:
+  - apache2
+  - mysql-server 
+  - python3-pymysql
+  - php
+  - php-mysql
+  - libapache2-mod-php 
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`mysql_root_password:` Set your custom root password"
+`mysql_db:` "Set your database nameordpress"
+`mysql_user:` "Set your mysql user name"
+`mysql_password:` "Set the password for mysql user"
 
-Dependencies
-------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
+This is an example on how to run all three roles with the playbook:
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
+    ```yaml
     - name: Run roles playbook
       hosts: all
       become: true
@@ -32,12 +40,14 @@ Including an example of how to use your role (for instance, with variables passe
         - { role: wordpress-ubuntu, when: ansible_os_family == 'Debian' }
         - { role: create-user-groups, when: ansible_os_family == 'Debian' }
         - { role: wordpress-redhat, when: ansible_os_family == 'RedHat' }
+        ```
 
 License
 -------
+
 BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Role created for practice.
