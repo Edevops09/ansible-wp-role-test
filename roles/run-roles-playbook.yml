@@ -7,3 +7,5 @@
     - { role: wordpress-ubuntu, when: ansible_os_family == 'Debian' }
     - { role: create-user-groups, when: ansible_os_family == 'Debian' }
     - { role: wordpress-redhat, when: ansible_os_family == 'RedHat' }
+
+...
