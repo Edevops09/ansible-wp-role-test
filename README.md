@@ -33,7 +33,7 @@ Example Playbook
 
 This is an example on how to run all three roles with the playbook:
 
-    ```
+    
     - name: Run roles playbook
       hosts: all
       become: true
@@ -42,7 +42,7 @@ This is an example on how to run all three roles with the playbook:
         - { role: wordpress-ubuntu, when: ansible_os_family == 'Debian' }
         - { role: create-user-groups, when: ansible_os_family == 'Debian' }
         - { role: wordpress-redhat, when: ansible_os_family == 'RedHat' }
-        ```
+        
 
 License
 -------
